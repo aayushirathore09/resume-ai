@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResumeAI — Analysis Result</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #0f0c29; min-height: 100vh; color: #fff; }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 60px;
+            background: rgba(255,255,255,0.03);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .logo { font-size: 22px; font-weight: 800; background: linear-gradient(135deg, #a78bfa, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .back-btn {
+            padding: 9px 22px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: transparent;
+            color: #fff;
+            transition: all 0.3s;
+        }
+        .back-btn:hover { background: rgba(255,255,255,0.08); }
+
+        .result-hero {
+            text-align: center;
+            padding: 60px 20px 40px;
+        }
+        .result-hero h1 {
+            font-size: 42px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 40%, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        .result-hero p { color: rgba(255,255,255,0.45); font-size: 15px; }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #7c3aed, #3b82f6);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 30px auto;
+            box-shadow: 0 0 40px rgba(124,58,237,0.4);
+        }
+        .score-num { font-size: 34px; font-weight: 800; }
+        .score-label { font-size: 11px; color: rgba(255,255,255,0.7); font-weight: 500; }
+
+        .result-grid {
+            max-width: 900px;
+            margin: 0 auto 80px;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .result-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 28px;
+            transition: all 0.3s;
+        }
+        .result-card:hover { transform: translateY(-3px); border-color: rgba(124,58,237,0.3); }
+        .result-card.full { grid-column: 1 / -1; }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 18px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+        }
+        .card-icon { font-size: 22px; }
+        .card-title { font-size: 15px; font-weight: 600; }
+
+        .card-title.green { color: #34d399; }
+        .card-title.red { color: #f87171; }
+        .card-title.yellow { color: #fbbf24; }
+        .card-title.blue { color: #60a5fa; }
+        .card-title.purple { color: #a78bfa; }
+
+        .card-body {
+            font-size: 13.5px;
+            color: rgba(255,255,255,0.65);
+            line-height: 1.9;
+            white-space: pre-wrap;
+        }
+
+        .try-again-btn {
+            display: block;
+            width: fit-content;
+            margin: 0 auto 60px;
+            padding: 14px 40px;
+            background: linear-gradient(135deg, #7c3aed, #3b82f6);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+        .try-again-btn:hover { opacity: 0.85; }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: rgba(255,255,255,0.2);
+            font-size: 13px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">ResumeAI ✦</div>
+        <a href="/"><button class="back-btn">← Analyze Another</button></a>
+    </nav>
+
+    <div class="result-hero">
+        <h1>Your Resume Analysis</h1>
+        <p>Here's a detailed breakdown of your resume</p>
+        <div class="score-circle">
+            <span class="score-num">72</span>
+            <span class="score-label">/ 100</span>
+        </div>
+    </div>
+
+    <div class="result-grid">
+        <div class="result-card">
+            <div class="card-header">
+                <span class="card-icon">✅</span>
+                <span class="card-title green">Strengths</span>
+            </div>
+            <div class="card-body">{{ strengths }}</div>
+        </div>
+
+        <div class="result-card">
+            <div class="card-header">
+                <span class="card-icon">⚠️</span>
+                <span class="card-title red">Weaknesses</span>
+            </div>
+            <div class="card-body">{{ weaknesses }}</div>
+        </div>
+
+        <div class="result-card">
+            <div class="card-header">
+                <span class="card-icon">🔧</span>
+                <span class="card-title yellow">Missing Skills</span>
+            </div>
+            <div class="card-body">{{ missing_skills }}</div>
+        </div>
+
+        <div class="result-card">
+            <div class="card-header">
+                <span class="card-icon">💡</span>
+                <span class="card-title blue">Improvements</span>
+            </div>
+            <div class="card-body">{{ improvements }}</div>
+        </div>
+    </div>
+    <!-- AI CHAT SECTION -->
+    <div style="max-width:900px; margin: 0 auto 40px; padding: 0 20px;">
+        <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; padding: 36px;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:24px; padding-bottom:16px; border-bottom: 1px solid rgba(255,255,255,0.07);">
+                <span style="font-size:22px;">🤖</span>
+                <div>
+                    <h2 style="font-size:16px; font-weight:600; color:#a78bfa;">Personal AI Career Chat</h2>
+                    <p style="font-size:12px; color:rgba(255,255,255,0.4); margin-top:2px;">Ask anything about your resume or career</p>
+                </div>
+            </div>
+
+            <!-- Chat Messages -->
+            <div id="chat-messages" style="height:320px; overflow-y:auto; margin-bottom:20px; display:flex; flex-direction:column; gap:14px; padding-right:4px;">
+                <div style="display:flex; gap:10px; align-items:flex-start;">
+                    <div style="width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,#7c3aed,#3b82f6); display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0;">🤖</div>
+                    <div style="background:rgba(124,58,237,0.12); border:1px solid rgba(124,58,237,0.2); padding:12px 16px; border-radius:0 14px 14px 14px; font-size:13.5px; color:rgba(255,255,255,0.75); line-height:1.7; max-width:80%;">
+                        Hi! I've analyzed your resume. Ask me anything — like "What skills should I learn?", "How do I improve my projects section?", or "Am I ready for internships?"
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input -->
+            <div style="display:flex; gap:10px;">
+                <input 
+                    type="text" 
+                    id="chat-input" 
+                    placeholder="Ask about your resume, skills, career..." 
+                    style="flex:1; padding:14px 18px; border-radius:12px; border:1.5px solid rgba(255,255,255,0.1); background:rgba(255,255,255,0.05); color:#fff; font-size:14px; font-family:'Inter',sans-serif; outline:none; transition:border 0.3s;"
+                    onkeydown="if(event.key==='Enter') sendMessage()"
+                    onfocus="this.style.borderColor='#7c3aed'"
+                    onblur="this.style.borderColor='rgba(255,255,255,0.1)'"
+                />
+                <button 
+                    onclick="sendMessage()"
+                    style="padding:14px 22px; background:linear-gradient(135deg,#7c3aed,#3b82f6); border:none; border-radius:12px; color:#fff; font-size:14px; font-weight:600; cursor:pointer; transition:opacity 0.3s;"
+                    onmouseover="this.style.opacity='0.85'"
+                    onmouseout="this.style.opacity='1'"
+                >Send ➤</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const resumeContext = `{{ resume_text }}`;
+
+        const suggestions = [
+            "What skills should I add to my resume?",
+            "Am I ready for internships?",
+            "How do I improve my projects section?",
+            "What should I learn in the next 30 days?"
+        ];
+
+        // Show suggestion chips
+        const chatMessages = document.getElementById('chat-messages');
+        const chipDiv = document.createElement('div');
+        chipDiv.style.cssText = 'display:flex; flex-wrap:wrap; gap:8px; margin-top:4px;';
+        suggestions.forEach(s => {
+            const chip = document.createElement('button');
+            chip.innerText = s;
+            chip.style.cssText = 'background:rgba(124,58,237,0.15); border:1px solid rgba(124,58,237,0.3); color:#a78bfa; padding:6px 14px; border-radius:20px; font-size:12px; cursor:pointer; font-family:Inter,sans-serif; transition:all 0.2s;';
+            chip.onmouseover = () => chip.style.background = 'rgba(124,58,237,0.3)';
+            chip.onmouseout = () => chip.style.background = 'rgba(124,58,237,0.15)';
+            chip.onclick = () => { document.getElementById('chat-input').value = s; sendMessage(); };
+            chipDiv.appendChild(chip);
+        });
+        chatMessages.appendChild(chipDiv);
+
+        async function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            if (!message) return;
+
+            input.value = '';
+
+            // User bubble
+            appendMessage(message, 'user');
+
+            // Typing indicator
+            const typingId = appendTyping();
+
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: message, resume: resumeContext })
+                });
+                const data = await response.json();
+                removeTyping(typingId);
+                appendMessage(data.reply, 'ai');
+            } catch(e) {
+                removeTyping(typingId);
+                appendMessage("Sorry, something went wrong. Please try again!", 'ai');
+            }
+        }
+
+        function appendMessage(text, sender) {
+            const div = document.createElement('div');
+            div.style.cssText = 'display:flex; gap:10px; align-items:flex-start;';
+
+            if (sender === 'user') {
+                div.style.flexDirection = 'reverse';
+                div.innerHTML = `
+                    <div style="margin-left:auto; background:linear-gradient(135deg,#7c3aed,#3b82f6); padding:12px 16px; border-radius:14px 0 14px 14px; font-size:13.5px; color:#fff; line-height:1.7; max-width:80%;">${text}</div>
+                    <div style="width:32px; height:32px; border-radius:50%; background:rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0;">👤</div>
+                `;
+            } else {
+                div.innerHTML = `
+                    <div style="width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,#7c3aed,#3b82f6); display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0;">🤖</div>
+                    <div style="background:rgba(124,58,237,0.12); border:1px solid rgba(124,58,237,0.2); padding:12px 16px; border-radius:0 14px 14px 14px; font-size:13.5px; color:rgba(255,255,255,0.75); line-height:1.7; max-width:80%;">${text}</div>
+                `;
+            }
+            chatMessages.appendChild(div);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function appendTyping() {
+            const id = 'typing-' + Date.now();
+            const div = document.createElement('div');
+            div.id = id;
+            div.style.cssText = 'display:flex; gap:10px; align-items:flex-start;';
+            div.innerHTML = `
+                <div style="width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,#7c3aed,#3b82f6); display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0;">🤖</div>
+                <div style="background:rgba(124,58,237,0.12); border:1px solid rgba(124,58,237,0.2); padding:12px 16px; border-radius:0 14px 14px 14px; font-size:13.5px; color:rgba(255,255,255,0.5); line-height:1.7;">Thinking...</div>
+            `;
+            chatMessages.appendChild(div);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            return id;
+        }
+
+        function removeTyping(id) {
+            const el = document.getElementById(id);
+            if (el) el.remove();
+        }
+    </script>
+
+    <a href="/" class="try-again-btn">🔍 &nbsp; Analyze Another Resume</a>
+
+    <footer>
+        Built with ❤️ by Aayushi &nbsp;·&nbsp; ResumeAI © 2025
+    </footer>
+
+</body>
+</html>

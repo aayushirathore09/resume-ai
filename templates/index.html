@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResumeAI — Smart Resume Analyzer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0f0c29;
+            min-height: 100vh;
+            color: #fff;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 60px;
+            background: rgba(255,255,255,0.03);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo { font-size: 22px; font-weight: 800; background: linear-gradient(135deg, #a78bfa, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .nav-links { display: flex; gap: 12px; }
+        .nav-btn {
+            padding: 9px 22px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+        }
+        .nav-btn.outline { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #fff; }
+        .nav-btn.outline:hover { background: rgba(255,255,255,0.08); }
+        .nav-btn.filled { background: linear-gradient(135deg, #7c3aed, #3b82f6); color: #fff; }
+        .nav-btn.filled:hover { opacity: 0.85; }
+
+        .hero {
+            text-align: center;
+            padding: 90px 20px 60px;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(124,58,237,0.15);
+            border: 1px solid rgba(124,58,237,0.3);
+            color: #a78bfa;
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 28px;
+        }
+        .hero h1 {
+            font-size: 58px;
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff 40%, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero p {
+            font-size: 18px;
+            color: rgba(255,255,255,0.55);
+            max-width: 520px;
+            margin: 0 auto 40px;
+            line-height: 1.7;
+        }
+
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            padding: 0 40px 80px;
+        }
+        .feature-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 32px 28px;
+            width: 220px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .feature-card:hover {
+            background: rgba(124,58,237,0.12);
+            border-color: rgba(124,58,237,0.35);
+            transform: translateY(-4px);
+        }
+        .feature-icon { font-size: 36px; margin-bottom: 14px; }
+        .feature-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; color: #fff; }
+        .feature-card p { font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.6; }
+
+        .analyzer-section {
+            max-width: 780px;
+            margin: 0 auto 80px;
+            padding: 0 20px;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .section-sub {
+            text-align: center;
+            color: rgba(255,255,255,0.45);
+            font-size: 15px;
+            margin-bottom: 36px;
+        }
+        .card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            padding: 40px;
+        }
+        label {
+            font-size: 12px;
+            font-weight: 500;
+            color: rgba(255,255,255,0.5);
+            display: block;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .upload-zone {
+            border: 2px dashed rgba(124,58,237,0.4);
+            border-radius: 14px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(124,58,237,0.05);
+            margin-bottom: 6px;
+        }
+        .upload-zone:hover { background: rgba(124,58,237,0.12); border-color: rgba(124,58,237,0.7); }
+        .upload-zone .upload-icon { font-size: 36px; margin-bottom: 10px; }
+        .upload-zone .upload-title { font-size: 14px; color: #a78bfa; font-weight: 500; margin-bottom: 4px; }
+        .upload-zone .upload-sub { font-size: 12px; color: rgba(255,255,255,0.3); }
+        .file-name { font-size: 12px; color: #34d399; margin-top: 8px; text-align: center; min-height: 18px; }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 20px 0;
+        }
+        .divider-line { flex: 1; height: 1px; background: rgba(255,255,255,0.1); }
+        .divider-text { font-size: 12px; color: rgba(255,255,255,0.3); }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 16px;
+            border-radius: 14px;
+            border: 1.5px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            resize: vertical;
+            outline: none;
+            transition: border 0.3s;
+            line-height: 1.6;
+        }
+        textarea::placeholder { color: rgba(255,255,255,0.25); }
+        textarea:focus { border-color: #7c3aed; }
+
+        .analyze-btn {
+            width: 100%;
+            padding: 16px;
+            margin-top: 18px;
+            background: linear-gradient(135deg, #7c3aed, #3b82f6);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.3s, transform 0.2s;
+            letter-spacing: 0.02em;
+            font-family: 'Inter', sans-serif;
+        }
+        .analyze-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+        .coming-soon {
+            text-align: center;
+            padding: 0 20px 80px;
+        }
+        .coming-soon h2 { font-size: 28px; font-weight: 700; margin-bottom: 12px; }
+        .coming-soon p { color: rgba(255,255,255,0.4); font-size: 14px; margin-bottom: 32px; }
+        .soon-cards { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+        .soon-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px dashed rgba(255,255,255,0.12);
+            border-radius: 16px;
+            padding: 24px 28px;
+            width: 200px;
+            text-align: center;
+        }
+        .soon-card .icon { font-size: 28px; margin-bottom: 10px; }
+        .soon-card h3 { font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.6); margin-bottom: 6px; }
+        .soon-badge { display: inline-block; background: rgba(124,58,237,0.2); color: #a78bfa; font-size: 10px; padding: 3px 10px; border-radius: 20px; font-weight: 500; }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: rgba(255,255,255,0.2);
+            font-size: 13px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <div class="logo">ResumeAI ✦</div>
+        <div class="nav-links">
+            <button class="nav-btn outline">Log In</button>
+            <button class="nav-btn filled" onclick="window.location.href='/builder'">Get Started</button>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <div class="hero">
+        <div class="hero-badge">✨ AI-Powered Career Tool</div>
+        <h1>Analyze Your Resume<br>Like a Pro</h1>
+        <p>Get instant AI feedback on your resume — strengths, weaknesses, missing skills, and improvements tailored for you.</p>
+    </div>
+
+    <!-- FEATURES -->
+    <div class="features">
+        <div class="feature-card">
+            <div class="feature-icon">🔍</div>
+            <h3>Deep Analysis</h3>
+            <p>AI scans every section of your resume for gaps and improvements.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <h3>Instant Feedback</h3>
+            <p>Get results in seconds — no waiting, no sign-up needed.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🎯</div>
+            <h3>Role-Specific Tips</h3>
+            <p>Suggestions tailored to IT, SDE, and fresher profiles.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📈</div>
+            <h3>Score Your Resume</h3>
+            <p>Know exactly where you stand with a clear score out of 100.</p>
+        </div>
+    </div>
+
+    <!-- ANALYZER -->
+    <div class="analyzer-section">
+        <h2 class="section-title">Try It Now — It's Free</h2>
+        <p class="section-sub">Upload your resume or paste the text below</p>
+        <div class="card">
+            <form action="/analyze" method="POST" enctype="multipart/form-data">
+
+                <!-- UPLOAD ZONE -->
+                <label>Upload Resume (PDF or Image)</label>
+                <div class="upload-zone" onclick="document.getElementById('file-input').click()"
+                    ondragover="event.preventDefault(); this.style.background='rgba(124,58,237,0.2)'"
+                    ondragleave="this.style.background='rgba(124,58,237,0.05)'"
+                    ondrop="handleDrop(event)">
+                    <div class="upload-icon">📄</div>
+                    <div class="upload-title">Click to upload or drag & drop</div>
+                    <div class="upload-sub">Supports PDF, JPG, PNG</div>
+                </div>
+                <input type="file" id="file-input" name="resume_file" accept=".pdf,.jpg,.jpeg,.png" style="display:none;" onchange="handleFileSelect(event)">
+                <div class="file-name" id="file-name"></div>
+
+                <!-- DIVIDER -->
+                <div class="divider">
+                    <div class="divider-line"></div>
+                    <span class="divider-text">OR PASTE TEXT</span>
+                    <div class="divider-line"></div>
+                </div>
+
+                <!-- TEXTAREA -->
+                <label>Paste Resume Text</label>
+                <textarea name="resume" id="resume-text" placeholder="Paste your resume content here — education, skills, experience, projects..."></textarea>
+
+                <button type="submit" class="analyze-btn">🔍 &nbsp; Analyze My Resume</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- COMING SOON -->
+    <div class="coming-soon">
+        <h2>More Features Coming Soon</h2>
+        <p>We're building powerful tools to supercharge your career journey</p>
+        <div class="soon-cards">
+            <div class="soon-card">
+                <div class="icon">👤</div>
+                <h3>User Accounts</h3>
+                <span class="soon-badge">Coming Soon</span>
+            </div>
+            <div class="soon-card">
+                <div class="icon">🤖</div>
+                <h3>AI Career Chat</h3>
+                <span class="soon-badge">Coming Soon</span>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        Built with ❤️ by Aayushi &nbsp;·&nbsp; ResumeAI © 2026
+    </footer>
+
+    <script>
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                document.getElementById('file-name').innerText = '✅ ' + file.name + ' ready to analyze';
+                document.getElementById('resume-text').placeholder = '📄 File uploaded! You can also add extra text here...';
+            }
+        }
+
+        function handleDrop(event) {
+            event.preventDefault();
+            event.currentTarget.style.background = 'rgba(124,58,237,0.05)';
+            const file = event.dataTransfer.files[0];
+            if (file) {
+                document.getElementById('file-input').files = event.dataTransfer.files;
+                document.getElementById('file-name').innerText = '✅ ' + file.name + ' ready to analyze';
+                document.getElementById('resume-text').placeholder = '📄 File uploaded! You can also add extra text here...';
+            }
+        }
+    </script>
+
+</body>
+</html>

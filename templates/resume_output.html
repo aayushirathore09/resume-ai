@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ name }} — Resume</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        /* ACTION BAR */
+        .action-bar {
+            max-width: 820px;
+            margin: 0 auto 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .action-bar a {
+            text-decoration: none;
+            color: #555;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s;
+        }
+        .action-bar a:hover { color: #7c3aed; }
+        .pdf-btn {
+            padding: 11px 28px;
+            background: linear-gradient(135deg, #7c3aed, #3b82f6);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: opacity 0.3s;
+        }
+        .pdf-btn:hover { opacity: 0.88; }
+
+        /* RESUME PAPER */
+        .resume {
+            max-width: 820px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        /* HEADER */
+        .resume-header {
+            background: linear-gradient(135deg, #1e1b4b 0%, #3730a3 60%, #7c3aed 100%);
+            padding: 44px 50px 36px;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+        .resume-header::before {
+            content: '';
+            position: absolute;
+            top: -60px; right: -60px;
+            width: 220px; height: 220px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+        }
+        .resume-header::after {
+            content: '';
+            position: absolute;
+            bottom: -40px; left: 30%;
+            width: 160px; height: 160px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.04);
+        }
+        .header-name {
+            font-size: 36px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 6px;
+            position: relative;
+            z-index: 1;
+        }
+        .header-role {
+            font-size: 15px;
+            font-weight: 400;
+            color: rgba(255,255,255,0.75);
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        .header-contacts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            position: relative;
+            z-index: 1;
+        }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.8);
+        }
+        .contact-dot {
+            width: 5px; height: 5px;
+            background: #a78bfa;
+            border-radius: 50%;
+        }
+
+        /* BODY */
+        .resume-body {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            min-height: 600px;
+        }
+
+        /* LEFT COLUMN */
+        .left-col {
+            background: #fafafa;
+            border-right: 1px solid #f0f0f0;
+            padding: 36px 28px;
+        }
+
+        /* RIGHT COLUMN */
+        .right-col {
+            padding: 36px 40px;
+        }
+
+        /* SECTION */
+        .section { margin-bottom: 28px; }
+        .section-title {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #7c3aed;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1.5px;
+            background: linear-gradient(to right, #e0d7ff, transparent);
+            border-radius: 2px;
+        }
+
+        /* SUMMARY */
+        .summary-text {
+            font-size: 13px;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        /* EDUCATION */
+        .edu-item { margin-bottom: 14px; }
+        .edu-degree { font-size: 13.5px; font-weight: 600; color: #1a1a1a; margin-bottom: 2px; }
+        .edu-college { font-size: 12.5px; color: #666; margin-bottom: 2px; }
+        .edu-meta { font-size: 11.5px; color: #999; }
+        .edu-cgpa {
+            display: inline-block;
+            background: #f0ebff;
+            color: #7c3aed;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 20px;
+            margin-top: 4px;
+        }
+
+        /* SKILLS */
+        .skill-group { margin-bottom: 12px; }
+        .skill-label { font-size: 11px; font-weight: 600; color: #888; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
+        .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+        .skill-tag {
+            background: #f0ebff;
+            color: #5b21b6;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11.5px;
+            font-weight: 500;
+        }
+        .skill-tag.soft {
+            background: #f0fdf4;
+            color: #166534;
+        }
+
+        /* PROJECTS */
+        .project-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed #f0f0f0;
+        }
+        .project-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .project-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
+        .project-name { font-size: 14px; font-weight: 700; color: #1a1a1a; }
+        .project-tech {
+            font-size: 11px;
+            color: #7c3aed;
+            font-weight: 500;
+            background: #f5f3ff;
+            padding: 2px 8px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+        .project-desc { font-size: 12.5px; color: #555; line-height: 1.7; margin-top: 5px; }
+
+        /* EXPERIENCE */
+        .exp-item { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px dashed #f0f0f0; }
+        .exp-item:last-child { border-bottom: none; }
+        .exp-role { font-size: 14px; font-weight: 700; color: #1a1a1a; }
+        .exp-meta { font-size: 12px; color: #888; margin: 3px 0 6px; }
+        .exp-company-name { color: #7c3aed; font-weight: 600; }
+        .exp-desc { font-size: 12.5px; color: #555; line-height: 1.7; }
+
+        /* PRINT */
+        @media print {
+            body { background: white; padding: 0; }
+            .action-bar { display: none; }
+            .resume { box-shadow: none; border-radius: 0; }
+            @page { margin: 0; size: A4; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ACTION BAR -->
+<div class="action-bar">
+    <a href="/builder">← Edit Resume</a>
+    <button class="pdf-btn" onclick="window.print()">⬇️ &nbsp; Download PDF</button>
+</div>
+
+<!-- RESUME -->
+<div class="resume">
+
+    <!-- HEADER -->
+    <div class="resume-header">
+        <div class="header-name">{{ name }}</div>
+        <div class="header-role">{{ role }}</div>
+        <div class="header-contacts">
+            {% if email %}<div class="contact-item"><span class="contact-dot"></span>{{ email }}</div>{% endif %}
+            {% if phone %}<div class="contact-item"><span class="contact-dot"></span>{{ phone }}</div>{% endif %}
+            {% if linkedin %}<div class="contact-item"><span class="contact-dot"></span>{{ linkedin }}</div>{% endif %}
+            {% if location %}<div class="contact-item"><span class="contact-dot"></span>{{ location }}</div>{% endif %}
+        </div>
+    </div>
+
+    <!-- BODY -->
+    <div class="resume-body">
+
+        <!-- LEFT -->
+        <div class="left-col">
+
+            {% if education %}
+            <div class="section">
+                <div class="section-title">Education</div>
+                {% for edu in education %}
+                <div class="edu-item">
+                    <div class="edu-degree">{{ edu.degree }}</div>
+                    <div class="edu-college">{{ edu.college }}</div>
+                    <div class="edu-meta">{{ edu.year }}</div>
+                    {% if edu.cgpa %}<span class="edu-cgpa">{{ edu.cgpa }}</span>{% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if skills %}
+            <div class="section">
+                <div class="section-title">Skills</div>
+                <div class="skill-group">
+                    <div class="skill-label">Technical</div>
+                    <div class="skill-tags">
+                        {% for skill in skills %}
+                        <span class="skill-tag">{{ skill }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% if soft_skills %}
+                <div class="skill-group" style="margin-top:14px;">
+                    <div class="skill-label">Soft Skills</div>
+                    <div class="skill-tags">
+                        {% for skill in soft_skills %}
+                        <span class="skill-tag soft">{{ skill }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+
+        </div>
+
+        <!-- RIGHT -->
+        <div class="right-col">
+
+            {% if summary %}
+            <div class="section">
+                <div class="section-title">Summary</div>
+                <div class="summary-text">{{ summary }}</div>
+            </div>
+            {% endif %}
+
+            {% if projects %}
+            <div class="section">
+                <div class="section-title">Projects</div>
+                {% for proj in projects %}
+                <div class="project-item">
+                    <div class="project-header">
+                        <div class="project-name">{{ proj.name }}</div>
+                        {% if proj.tech %}<span class="project-tech">{{ proj.tech }}</span>{% endif %}
+                    </div>
+                    <div class="project-desc">{{ proj.desc }}</div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if experience %}
+            <div class="section">
+                <div class="section-title">Experience</div>
+                {% for exp in experience %}
+                <div class="exp-item">
+                    <div class="exp-role">{{ exp.role }}</div>
+                    <div class="exp-meta"><span class="exp-company-name">{{ exp.company }}</span>{% if exp.duration %} &nbsp;·&nbsp; {{ exp.duration }}{% endif %}</div>
+                    <div class="exp-desc">{{ exp.desc }}</div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

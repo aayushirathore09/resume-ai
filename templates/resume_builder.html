@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResumeAI — Resume Builder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #0f0c29; min-height: 100vh; color: #fff; }
+
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 60px;
+            background: rgba(255,255,255,0.03);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .logo { font-size: 22px; font-weight: 800; background: linear-gradient(135deg, #a78bfa, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .back-btn { padding: 9px 22px; border-radius: 10px; font-size: 14px; font-weight: 500; cursor: pointer; border: 1px solid rgba(255,255,255,0.2); background: transparent; color: #fff; transition: all 0.3s; text-decoration: none; display: inline-block; }
+        .back-btn:hover { background: rgba(255,255,255,0.08); }
+
+        .hero { text-align: center; padding: 60px 20px 40px; }
+        .hero h1 { font-size: 42px; font-weight: 800; background: linear-gradient(135deg, #fff 40%, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; }
+        .hero p { color: rgba(255,255,255,0.45); font-size: 15px; }
+
+        .builder-container { max-width: 760px; margin: 0 auto 60px; padding: 0 20px; }
+
+        .form-section { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; padding: 32px; margin-bottom: 20px; }
+        .form-section h2 { font-size: 15px; font-weight: 600; color: #a78bfa; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .form-group { margin-bottom: 16px; }
+        label { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.5); display: block; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
+        input, textarea {
+            width: 100%; padding: 11px 14px;
+            border-radius: 10px;
+            border: 1.5px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+            font-size: 13.5px;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: border 0.3s;
+        }
+        input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.25); }
+        input:focus, textarea:focus { border-color: #7c3aed; }
+        textarea { resize: vertical; min-height: 80px; }
+
+        .add-btn {
+            width: 100%; padding: 10px;
+            background: rgba(124,58,237,0.15);
+            border: 1px dashed rgba(124,58,237,0.4);
+            color: #a78bfa;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+        .add-btn:hover { background: rgba(124,58,237,0.25); }
+
+        .submit-btn {
+            width: 100%; padding: 16px;
+            background: linear-gradient(135deg, #7c3aed, #3b82f6);
+            color: white; border: none; border-radius: 14px;
+            font-size: 16px; font-weight: 600; cursor: pointer;
+            margin-top: 10px; transition: opacity 0.3s;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.02em;
+        }
+        .submit-btn:hover { opacity: 0.88; }
+
+        @media (max-width: 600px) {
+            .form-row { grid-template-columns: 1fr; }
+            nav { padding: 16px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">ResumeAI ✦</div>
+    <a href="/" class="back-btn">← Back to Home</a>
+</nav>
+
+<div class="hero">
+    <h1>Resume Builder</h1>
+    <p>Fill in your details and generate a professional resume instantly</p>
+</div>
+
+<form action="/build-resume" method="POST">
+<div class="builder-container">
+
+    <!-- Personal Info -->
+    <div class="form-section">
+        <h2>👤 Personal Information</h2>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" name="name" placeholder="Ayushi Sharma">
+            </div>
+            <div class="form-group">
+                <label>Job Title / Role</label>
+                <input type="text" name="role" placeholder="Software Developer Intern">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" placeholder="ayushi@email.com">
+            </div>
+            <div class="form-group">
+                <label>Phone</label>
+                <input type="text" name="phone" placeholder="+91 98765 43210">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>LinkedIn / GitHub</label>
+                <input type="text" name="linkedin" placeholder="linkedin.com/in/ayushi">
+            </div>
+            <div class="form-group">
+                <label>Location</label>
+                <input type="text" name="location" placeholder="Bhopal, India">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Professional Summary</label>
+            <textarea name="summary" placeholder="A passionate Computer Science student with strong Java and Python skills, looking for opportunities to build real-world projects..."></textarea>
+        </div>
+    </div>
+
+    <!-- Education -->
+    <div class="form-section">
+        <h2>🎓 Education</h2>
+        <div id="education-list">
+            <div class="edu-entry" style="margin-bottom:16px; padding-bottom:16px; border-bottom:1px solid rgba(255,255,255,0.07);">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Degree</label>
+                        <input type="text" name="edu_degree" placeholder="B.Tech in Computer Science">
+                    </div>
+                    <div class="form-group">
+                        <label>College / University</label>
+                        <input type="text" name="edu_college" placeholder="RGPV University, Bhopal">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Year</label>
+                        <input type="text" name="edu_year" placeholder="2022 — 2026">
+                    </div>
+                    <div class="form-group">
+                        <label>CGPA / Percentage</label>
+                        <input type="text" name="edu_cgpa" placeholder="8.2 CGPA">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="add-btn" onclick="addEducation()">+ Add Another Education</button>
+    </div>
+
+    <!-- Skills -->
+    <div class="form-section">
+        <h2>⚡ Skills</h2>
+        <div class="form-group">
+            <label>Technical Skills (comma separated)</label>
+            <input type="text" name="skills" placeholder="Java, Python, HTML, CSS, Flask, Git">
+        </div>
+        <div class="form-group">
+            <label>Soft Skills (comma separated)</label>
+            <input type="text" name="soft_skills" placeholder="Problem Solving, Teamwork, Communication">
+        </div>
+    </div>
+
+    <!-- Projects -->
+    <div class="form-section">
+        <h2>🚀 Projects</h2>
+        <div id="projects-list">
+            <div class="proj-entry" style="margin-bottom:16px; padding-bottom:16px; border-bottom:1px solid rgba(255,255,255,0.07);">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Project Name</label>
+                        <input type="text" name="proj_name" placeholder="ResumeAI — Resume Analyzer">
+                    </div>
+                    <div class="form-group">
+                        <label>Tech Stack</label>
+                        <input type="text" name="proj_tech" placeholder="Python, Flask, HTML, CSS">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea name="proj_desc" placeholder="Built a web app that analyzes resumes using AI and provides instant feedback..."></textarea>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="add-btn" onclick="addProject()">+ Add Another Project</button>
+    </div>
+
+    <!-- Experience -->
+    <div class="form-section">
+        <h2>💼 Experience (if any)</h2>
+        <div id="experience-list">
+            <div class="exp-entry" style="margin-bottom:16px; padding-bottom:16px; border-bottom:1px solid rgba(255,255,255,0.07);">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Role</label>
+                        <input type="text" name="exp_role" placeholder="Web Development Intern">
+                    </div>
+                    <div class="form-group">
+                        <label>Company</label>
+                        <input type="text" name="exp_company" placeholder="TechCorp Pvt Ltd">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Duration</label>
+                        <input type="text" name="exp_duration" placeholder="June 2024 — Aug 2024">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea name="exp_desc" placeholder="Developed and maintained web features..."></textarea>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="add-btn" onclick="addExperience()">+ Add Another Experience</button>
+    </div>
+
+    <button type="submit" class="submit-btn">✨ &nbsp; Generate My Resume</button>
+
+</div>
+</form>
+
+<script>
+    function addEducation() {
+        const list = document.getElementById('education-list');
+        const div = document.createElement('div');
+        div.className = 'edu-entry';
+        div.style.cssText = 'margin-bottom:16px; padding-bottom:16px; border-bottom:1px solid rgba(255,255,255,0.07);';
+        div.innerHTML = `
+            <div class="form-row">
+                <div class="form-group"><label>Degree</label><input type="text" name="edu_degree" placeholder="B.Tech in Computer Science"></div>
+                <div class="form-group"><label>College / University</label><input type="text" name="edu_college" placeholder="University Name"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Year</label><input type="text" name="edu_year" placeholder="2022 — 2026"></div>
+                <div class="form-group"><label>CGPA / Percentage</label><input type="text" name="edu_cgpa" placeholder="8.2 CGPA"></div>
+            </div>
+        `;
+        list.appendChild(div);
+    }
+
+    function addProject() {
+        const list = document.getElementById('projects-list');
+        const div = document.createElement('div');
+        div.className = 'proj-entry';
+        div.style.cssText = 'margin-bottom:16px; padding-bottom:16px; border-bottom:1px solid rgba(255,255,255,0.07);';
+        div.innerHTML = `
+            <div class="form-row">
+                <div class="form-group"><label>Project Name</label><input type="text" name="proj_name" placeholder="Project Name"></div>
+                <div class="form-group"><label>Tech Stack</label><input type="text" name="proj_tech" placeholder="Python, Flask..."></div>
+            </div>
+            <div class="form-group"><label>Description</label><textarea name="proj_desc" placeholder="What did you build?"></textarea></div>
+        `;
+        list.appendChild(div);
+    }
+
+    function addExperience() {
+        const list = document.getElementById('experience-list');
+        const div = document.createElement('div');
+        div.className = 'exp-entry';
+        div.style.cssText = 'margin-bottom:16px; padding-bottom:16px; border-bottom:1px solid rgba(255,255,255,0.07);';
+        div.innerHTML = `
+            <div class="form-row">
+                <div class="form-group"><label>Role</label><input type="text" name="exp_role" placeholder="Intern / Developer"></div>
+                <div class="form-group"><label>Company</label><input type="text" name="exp_company" placeholder="Company Name"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Duration</label><input type="text" name="exp_duration" placeholder="June 2024 — Aug 2024"></div>
+            </div>
+            <div class="form-group"><label>Description</label><textarea name="exp_desc" placeholder="What did you do?"></textarea></div>
+        `;
+        list.appendChild(div);
+    }
+</script>
+
+</body>
+</html>
